@@ -1,6 +1,7 @@
 import ast
 import operator
 import math
+import os
 from mcp.server.fastmcp import FastMCP
 
 def evaluate(expression: str) -> str:
@@ -57,4 +58,7 @@ async def calculate(expression: str) -> str:
     return evaluate(expression)
 
 def main():
-    mcp.run()
+    # Defaults to stdio (FastMCP's default) so existing stdio-based MCP
+    # clients are unaffected. Set MCP_TRANSPORT=sse to run as a network
+    # service instead (e.g. for the LiteLLM MCP gateway).
+    mcp.run(transport=os.environ.get("MCP_TRANSPORT", "stdio"))
